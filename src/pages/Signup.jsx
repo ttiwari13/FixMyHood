@@ -1,11 +1,12 @@
 // src/pages/Signup.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import logo from "../assets/logo.jpg";
 
 const Signup = () => {
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -22,7 +23,10 @@ const Signup = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, {
+        displayName: firstName
+      });
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -32,13 +36,20 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-teal-600">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <div className="flex flex-col items-center mb-6">
-  <img src={logo} alt="FixMyHood Logo" className="w-16 mb-3" />
-  <h1 className="text-2xl font-bold text-teal-700">FixMyHood</h1>
-</div>
-
+        <div className="flex flex-col items-center mb-6">
+          <img src={logo} alt="FixMyHood Logo" className="w-16 mb-3" />
+          <h1 className="text-2xl font-bold text-teal-700">FixMyHood</h1>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="First Name"
+            className="w-full px-4 py-2 border rounded-md"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
           <input
             type="email"
             placeholder="Email"
