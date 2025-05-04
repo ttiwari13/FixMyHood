@@ -48,6 +48,7 @@ What Makes FixMyHood Unique?
 Tech Stack:-
 
 Frontend: React 
+
 Backend & Realtime Database: Firebase (Firestore, Authentication, Storage)  
 Maps & Location Services: Google Maps API  
 State Management: Redux Toolkit  
